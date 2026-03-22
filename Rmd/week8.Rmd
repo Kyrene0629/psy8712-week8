@@ -27,3 +27,14 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(tidyverse)
 library(kableExtra)
 ```
+
+**Data Import and Cleaning**
+I imported and cleaned the data like how i did last week. Also, I realize the class for qs are already integer, i should double check before i write that. I reverse-coded q5 by just using 6 - q5 because it is on 1-5 likert scale, then 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2, 5 -> 1.
+```{r section 2 data import and cleaning}
+week8_tbl <- read.csv("../data/week3.csv") %>%
+  mutate(
+    timeStart = ymd_hms(timeStart),
+    condition = factor(condition, levels = c("A", "B", "C"), labels = c("Block A", "Block B", "Control")),
+    gender = factor(gender, levels = c("M", "F"), labels = c("Male", "Female")),
+    q5 = 6 - q5)
+```

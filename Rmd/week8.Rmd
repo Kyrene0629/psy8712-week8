@@ -64,3 +64,5 @@ mean_cor
 ```
 
 I observed a correlation of `r sub("^0\\.", ".", sprintf("%.2f", mean_cor$estimate))` between mean scores on Q1-Q6 and mean scores on Q8-Q10. The associated p-value is `r sub("^0\\.", ".", sprintf("%.2f", mean_cor$p.value))`, which means this correlation is not statistically significant because the p-value is greater than .05. Therefore, I would fail to reject the null hypothesis and conclude that there is not enough evidence for a statistically significant linear relationship between mean scores on Q1-Q6 and mean scores on Q8-Q10.
+
+**Data Export**

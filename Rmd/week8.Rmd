@@ -29,12 +29,37 @@ library(kableExtra)
 ```
 
 **Data Import and Cleaning**
-I imported and cleaned the data like how i did last week. Also, I realize the class for qs are already integer, i should double check before i write that. I reverse-coded q5 by just using 6 - q5 because it is on 1-5 likert scale, then 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2, 5 -> 1.
-```{r section 2 data import and cleaning}
+I imported and cleaned the data like how i did last week. Also, I realize the class for qs are already integer, i should double check before i write that. I reverse-coded q5 by just using 6 - q5 because it is on 1-5 likert scale, then 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2, 5 -> 1. Lastly, I create two variables called mean_q1q6 and mean_q8q10 by calculate the mean for q1-q6 on x axis and q8 to q10 on y axis to prepare for following questions.
+```{r data import and cleaning}
 week8_tbl <- read.csv("../data/week3.csv") %>%
   mutate(
     timeStart = ymd_hms(timeStart),
     condition = factor(condition, levels = c("A", "B", "C"), labels = c("Block A", "Block B", "Control")),
     gender = factor(gender, levels = c("M", "F"), labels = c("Male", "Female")),
-    q5 = 6 - q5)
+    q5 = 6 - q5,
+    mean_q1q6 = rowMeans(across(q1:q6)),
+    mean_q8q10 = rowMeans(across(q8:q10)))
 ```
+
+**Visualization**
+I start with week8_tbl dataset, I used kable() to visually display the data contained q1 to q6 based on the question. I used what i got from last code chunk (mean scores for q1 to q6 and mean scores for q8 to q10) and pass this into ggplot() and map mean_q1q6 to x axis and mean_q8q10 to y axis. I then put geom_point() to put one point for each person on the scatterplot. I add a purple OLS regression line and the shaded error band. Lastly, i label the x axis and y axis accordingly.
+```{r Visualization, echo = F, warning = F, message = F}
+week8_tbl %>%
+  select(q1:q6) %>%
+  kable()
+
+week8_tbl %>%
+  ggplot(aes(x = mean_q1q6, y = mean_q8q10)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE, color = "purple") +
+  scale_x_continuous(name = "Mean Scores on Q1-Q6") +
+  scale_y_continuous(name = "Mean Scores on Q8-Q10")
+```
+
+**Analysis**
+```{r analysis}
+mean_cor <- cor.test(week8_tbl$mean_q1q6, week8_tbl$mean_q8q10)
+mean_cor
+```
+
+I observed a correlation of `r sub("^0\\.", ".", sprintf("%.2f", mean_cor$estimate))` between mean scores on Q1-Q6 and mean scores on Q8-Q10. The associated p-value is `r sub("^0\\.", ".", sprintf("%.2f", mean_cor$p.value))`, which means this correlation is not statistically significant because the p-value is greater than .05. Therefore, I would fail to reject the null hypothesis and conclude that there is not enough evidence for a statistically significant linear relationship between mean scores on Q1-Q6 and mean scores on Q8-Q10.

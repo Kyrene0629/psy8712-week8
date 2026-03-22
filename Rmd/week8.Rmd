@@ -1,0 +1,21 @@
+---
+title: "PSY 8712 Week 8 Project"
+author: "Kyrene"
+date: "2026-03-22"
+output: 
+   html_document:
+     theme:
+        bootswatch: cosmo
+        fg: "#0000FF"
+        bg: "#FFFFFF"
+     toc: true
+     toc_float: true
+     df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Reproducible Image and Online Resources
+An image of this project as of date can be accessed by clicking this link.

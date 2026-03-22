@@ -57,6 +57,7 @@ week8_tbl %>%
 ```
 
 **Analysis**
+I did a Pearson correlation test between these two means and save that to an object named mean_cor. I print the output so that I can display the full correlation test output and reuse the correlation value and p value dynamically in my written interpretation
 ```{r analysis}
 mean_cor <- cor.test(week8_tbl$mean_q1q6, week8_tbl$mean_q8q10)
 mean_cor

@@ -1,50 +1,51 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
-
 library(shiny)
+library(tidyverse)
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
+  titlePanel("shiny_week8"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("gender_choice",
+                  "Display Participants",
+                  choices = c("All", "Male", "Female"),
+                  selected = "All"),
+      radioButtons("band_choice",
+                   "Regression Error Band",
+                   choices = c("Display Error Band", "Suppress Error Band"),
+                   selected = "Display Error Band"),
+      radioButtons("date_choice",
+                   "Participants Before July 1, 2017",
+                   choices = c("Include", "Exclude"),
+                   selected = "Include")
+    ),
+    mainPanel(
+      plotOutput("meanPlot")
+      )
     )
-)
+  )
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
+  week8_tbl_skinny <- readRDS("week8_tbl_skinny.rds")
+  filtered_tbl <- reactive({
+    plot_tbl <- week8_tbl_skinny
+    if (input$gender_choice != "All") {
+      plot_tbl <- filter(plot_tbl, gender == input$gender_choice)
+    }
+    if (input$date_choice == "Exclude") {
+      plot_tbl <- filter(plot_tbl, as.Date(timeStart) >= as.Date("2017-07-01"))
+    }
+    plot_tbl
+  })
+  
+output$meanPlot <- renderPlot({
+  ggplot(filtered_tbl(), aes(x = mean_q1q6, y = mean_q8q10)) +
+    geom_point() +
+    geom_smooth(method = "lm", 
+                color = "purple", 
+                se = input$band_choice == "Display Error Band") +
+    scale_x_continuous(name = "Mean Scores on Q1-Q6") +
+    scale_y_continuous(name = "Mean Scores on Q8-Q10")
+  })
 }
 
 # Run the application 

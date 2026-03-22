@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Reproducible Image and Online Resources**
 An image of this project as of *`r Sys.Date()`* can be accessed by https://mybinder.org/v2/gh/Kyrene0629/psy8712-week8.git/HEAD.
-An interactive web app is available by clicking this link instead.
+An interactive web app is available by https://kyrene0629.shinyapps.io/shiny_week8/.
 
 **Script Settings and Resources**
 ```{r Script Settings and Resources, echo = T, warning = F, message = F}
@@ -42,7 +42,7 @@ week8_tbl <- read.csv("../data/week3.csv") %>%
 ```
 
 **Visualization**
-I start with week8_tbl dataset, I used kable() to visually display the data contained q1 to q6 based on the question. I used what i got from last code chunk (mean scores for q1 to q6 and mean scores for q8 to q10) and pass this into ggplot() and map mean_q1q6 to x axis and mean_q8q10 to y axis. I then put geom_point() to put one point for each person on the scatterplot. I add a purple OLS regression line and the shaded error band. Lastly, i label the x axis and y axis accordingly.
+I used kable() to visually display the data in week8_tbl contained q1 to q6 based on the question. I used what i got from last code chunk (mean scores for q1 to q6 and mean scores for q8 to q10) and pass this into ggplot() and map mean_q1q6 to x axis and mean_q8q10 to y axis. I then put geom_point() to put one point for each person on the scatterplot. I add a purple OLS regression line and the shaded error band. Lastly, i label the x axis and y axis accordingly.
 ```{r Visualization, echo = F, warning = F, message = F}
 week8_tbl %>%
   select(q1:q6) %>%
@@ -66,3 +66,9 @@ mean_cor
 I observed a correlation of `r sub("^0\\.", ".", sprintf("%.2f", mean_cor$estimate))` between mean scores on Q1-Q6 and mean scores on Q8-Q10. The associated p-value is `r sub("^0\\.", ".", sprintf("%.2f", mean_cor$p.value))`, which means this correlation is not statistically significant because the p-value is greater than .05. Therefore, I would fail to reject the null hypothesis and conclude that there is not enough evidence for a statistically significant linear relationship between mean scores on Q1-Q6 and mean scores on Q8-Q10.
 
 **Data Export**
+I choose to keep timeStart, gender, mean_q1q6, and mean_q8q10 that shiny app needs. timeStart is used for filtering participants before July 1, 2017. mean_q1q6 is x axis, mean_q8q10 is y axis, and gender for male, female, and all. I then use saveRDS to just export a skinny version of the full dataset as an .rds file into the shiny app subfolder for later use in the app. I did everything in a single pipe, following the instruction.
+```{r data export}
+week8_tbl %>%
+  select(timeStart, gender, mean_q1q6, mean_q8q10) %>%
+  saveRDS(file = "../shiny/shiny_week8/week8_tbl_skinny.rds")
+```

@@ -18,8 +18,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 **Reproducible Image and Online Resources**
-An image of this project as of *`r Sys.Date()`* can be accessed by https://mybinder.org/v2/gh/Kyrene0629/psy8712-week8.git/HEAD.
-An interactive web app is available by https://kyrene0629.shinyapps.io/shiny_week8/.
+An image of this project as of *`r Sys.Date()`* can be accessed by [clicking this link]. https://mybinder.org/v2/gh/Kyrene0629/psy8712-week8.git/HEAD.
+An interactive web app is available by [clicking this link instead]. https://kyrene0629.shinyapps.io/shiny_week8/.
 
 **Script Settings and Resources**
 ```{r Script Settings and Resources, echo = T, warning = F, message = F}
